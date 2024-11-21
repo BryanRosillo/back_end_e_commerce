@@ -12,7 +12,7 @@ import com.ecommerce.backend.entidades.Producto;
 @RestController
 @RequestMapping(path="/productos", produces="application/json")
 public class ProductoREST {
-	
+	/*
 	@Autowired
 	private ProductoDAO productoDao;
 	
@@ -21,6 +21,7 @@ public class ProductoREST {
 	public Producto agregarProducto(@RequestBody Producto producto) {
 		return productoDao.save(producto);
 	}
+	*/
 	
 	
 
