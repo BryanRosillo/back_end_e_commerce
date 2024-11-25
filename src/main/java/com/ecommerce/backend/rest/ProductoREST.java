@@ -23,7 +23,7 @@ public class ProductoREST {
 	
 	
 	@PostMapping("/upload/{id}")
-    public ResponseEntity<String> uploadImage(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> subirImagenProducto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         try {
             Producto producto = productoDao.findById(id)
                                                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
@@ -37,7 +37,7 @@ public class ProductoREST {
     }
 	
     @GetMapping("/imagen/{id}")
-    public ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+    public ResponseEntity<byte[]> devolverImagenProducto(@PathVariable Long id) {
         Producto producto = productoDao.findById(id)
                                                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 

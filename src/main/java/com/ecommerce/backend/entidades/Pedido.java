@@ -1,6 +1,10 @@
 package com.ecommerce.backend.entidades;
 
+
 import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.rest.core.annotation.RestResource;
 
@@ -9,31 +13,32 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PostLoad;
 import jakarta.persistence.PostPersist;
 import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Data
 @Entity
-@RestResource(rel="productos", path="productos")
-public class Producto implements Serializable {
+@RestResource(rel="pedidos", path="pedidos")
+public class Pedido implements Serializable {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) 
-	private Long id;
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private Long id_pedido;
 	
-	private String nombre;
-	private double precio;
-	private String descripcion;
+	private Date fechaPedido;
 	
-	@Lob
-	private byte[] imagen;
+	private double totalDinero;
+	
+	@ManyToMany
+	private List<Producto> productos;
 	
 	@ManyToOne
 	@JoinColumn(name="id_usuario")
 	private Usuario usuario;
 	
-
+    
 }

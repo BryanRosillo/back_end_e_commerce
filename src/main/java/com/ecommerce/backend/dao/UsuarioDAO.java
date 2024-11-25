@@ -4,12 +4,16 @@ import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import com.ecommerce.backend.entidades.Usuario;
 
-@RepositoryRestResource(exported = false)
+//@RepositoryRestResource(exported = false)
 public interface UsuarioDAO extends CrudRepository<Usuario, Long> {
 	
+	@RestResource(exported=false)
 	Usuario save(Usuario usuario);
+	
+	@RestResource(exported=false)
 	Optional<Usuario> findByUsername(String username);
 }
