@@ -12,12 +12,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry configuracion) {
-		configuracion.addEndpoint("/chat-websocket").setAllowedOrigins("http://127.0.0.1:5500").withSockJS();
+		configuracion.addEndpoint("/chat-websocket").setAllowedOriginPatterns("*").withSockJS();
 	}
 
 	@Override
 	public void configureMessageBroker(MessageBrokerRegistry configuracion) {
-		configuracion.enableSimpleBroker("/queue");
+		configuracion.enableSimpleBroker("/topic");
 		configuracion.setApplicationDestinationPrefixes("/app");
 	}
 	

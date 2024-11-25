@@ -8,7 +8,7 @@ import org.springframework.data.rest.core.annotation.RestResource;
 
 import com.ecommerce.backend.entidades.Usuario;
 
-//@RepositoryRestResource(exported = false)
+
 public interface UsuarioDAO extends CrudRepository<Usuario, Long> {
 	
 	@RestResource(exported=false)

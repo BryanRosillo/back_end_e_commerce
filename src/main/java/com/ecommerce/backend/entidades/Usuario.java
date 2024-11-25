@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 
 @Data
@@ -19,6 +20,9 @@ public class Usuario implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_usuario;
+	
+	@Email(message = "El email no es válido.")
+	private String correo;
 	
 	private String username;
 	
@@ -34,5 +38,6 @@ public class Usuario implements Serializable {
 	@OneToMany(mappedBy="usuario")
 	private List<Pedido> pedidos;
 	
+	private String preguntaSeguridad;
 	
 }
