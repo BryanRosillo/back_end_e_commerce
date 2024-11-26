@@ -18,7 +18,8 @@ public class SeguridadConfig {
 	@Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
 		return http.authorizeHttpRequests(peticion -> 
-						peticion.anyRequest().permitAll())
+						peticion.requestMatchers("/h2-console/**").permitAll()
+						.anyRequest().permitAll())
 					.csrf(csrf -> 
 						csrf.disable())
 					.headers(headers -> 
