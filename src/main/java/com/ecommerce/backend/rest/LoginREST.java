@@ -33,7 +33,7 @@ public class LoginREST {
 			if(!passwordEncoder.matches(usuario.getPassword(), usuarioRegistrado.getPassword())) {
 				return ResponseEntity.notFound().build();
 			}
-			return ResponseEntity.ok().build();
+			return ResponseEntity.ok().body(usuarioRegistrado.getId_usuario());
 		}
 		
 	}
