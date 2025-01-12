@@ -33,6 +33,7 @@ public class RegistroREST {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}else {
 			usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
+			usuario.setPreguntaSeguridad(passwordEncoder.encode(usuario.getPreguntaSeguridad()));
 			usuarioDao.save(usuario);
 			return ResponseEntity.status(HttpStatus.OK).body(usuario);
 		}
@@ -45,11 +46,15 @@ public class RegistroREST {
         if (usuarioOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado.");
         }
-
+        
         Usuario usuarioActualizar = usuarioOpt.get();
+        
+        if(!passwordEncoder.matches(usuario.getPreguntaSeguridad(), usuarioActualizar.getPreguntaSeguridad())) {
+        	return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Credenciales incorrectas.");
+        }
+        
         usuarioActualizar.setPassword(passwordEncoder.encode(usuario.getNuevaContrasena()));
         usuarioDao.save(usuarioActualizar);
-
         return ResponseEntity.status(HttpStatus.OK).body("Contraseña actualizada correctamente.");
     }
 	

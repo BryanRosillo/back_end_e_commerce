@@ -6,4 +6,5 @@ import lombok.Data;
 public class UsuarioDTO {
     private String username;
     private String nuevaContrasena;
+    private String preguntaSeguridad;
 }
