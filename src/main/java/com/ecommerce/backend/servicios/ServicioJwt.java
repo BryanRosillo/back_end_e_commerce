@@ -22,9 +22,9 @@ public class ServicioJwt {
 		this.LLAVE_SECRETA = Keys.hmacShaKeyFor(secreto.getBytes());
 	}
 	
-	public String generarToken(String username) {
+	public String generarToken(String identificador) {
 		return Jwts.builder()
-				.subject(username)
+				.subject(identificador)
 				.issuedAt(new Date())
 				.expiration(new Date(System.currentTimeMillis() + this.tiempoExpiracion * 1000))
 				.signWith(LLAVE_SECRETA, Jwts.SIG.HS256)
