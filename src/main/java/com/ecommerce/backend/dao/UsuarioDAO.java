@@ -16,4 +16,8 @@ public interface UsuarioDAO extends CrudRepository<Usuario, Long> {
 	
 	@RestResource(exported=false)
 	Optional<Usuario> findByUsername(String username);
+	
+	@RestResource(exported=false)
+	Optional<Usuario> findById(Long id);
+	
 }

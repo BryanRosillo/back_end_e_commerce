@@ -12,6 +12,8 @@ import com.ecommerce.backend.entidades.Usuario;
 import com.ecommerce.backend.entidades.UsuarioDTO;
 import com.ecommerce.backend.servicios.ServicioUsuario;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(produces="application/json")
 public class ControladorRegistro {
@@ -24,9 +26,9 @@ public class ControladorRegistro {
     }
 
     @PostMapping(path="/registro", consumes="application/json")
-	public ResponseEntity<Usuario> registrarUsuario(@RequestBody Usuario usuario) {
+	public ResponseEntity<Usuario> registrarUsuario(@RequestBody @Valid Usuario usuario) {
         try{
-            this.servicioUsuario.guardarUsuario(usuario);
+            this.servicioUsuario.registrarUsuario(usuario);
             return ResponseEntity.status(HttpStatus.OK).body(usuario);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -34,7 +36,7 @@ public class ControladorRegistro {
 	}
 	
     @PatchMapping(path="/cambiar-contrasena", consumes="application/json")
-    public ResponseEntity<String> cambiarContrasena(@RequestBody UsuarioDTO usuario) {
+    public ResponseEntity<String> cambiarContrasena(@RequestBody @Valid UsuarioDTO usuario) {
         try {
             this.servicioUsuario.actualizarContrasenia(usuario);
             return ResponseEntity.status(HttpStatus.OK).body("Contraseña actualizada correctamente.");

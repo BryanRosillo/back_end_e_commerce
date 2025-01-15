@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
@@ -22,8 +23,9 @@ public class Pedido implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id_pedido;
 	
-	private Date fechaPedido;
+	private Date fechaPedido = new Date();
 	
+	@Positive(message = "El valor total del pedido debe ser positivo.")
 	private double totalDinero;
 	
 	@ManyToMany

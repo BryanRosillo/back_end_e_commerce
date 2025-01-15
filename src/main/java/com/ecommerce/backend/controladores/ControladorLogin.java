@@ -24,7 +24,7 @@ public class ControladorLogin {
 	@PostMapping
 	public ResponseEntity<Object> validarCuenta(@RequestBody Usuario usuario) {
 		try{
-			String token = this.servicioUsuario.validarUsuario(usuario.getUsername());
+			String token = this.servicioUsuario.validarUsuario(usuario.getUsername(), usuario.getPassword());
 			return ResponseEntity.ok().body(token);
 		}catch(Exception e){
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

@@ -31,13 +31,13 @@ public class ServicioJwt {
 				.compact();
 	}
 	
-	public String extraerUsername(String token) {
-		return Jwts.parser()
+	public Long extraerId(String token) {
+		return Long.parseLong(Jwts.parser()
 				.verifyWith(LLAVE_SECRETA)
 				.build()
 				.parseSignedClaims(token)
 				.getPayload()
-				.getSubject();
+				.getSubject());
 	}
 	
 	public boolean validarToken(String token) {

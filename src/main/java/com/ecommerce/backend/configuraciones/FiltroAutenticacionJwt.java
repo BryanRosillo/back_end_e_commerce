@@ -35,9 +35,9 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter{
 		if((cabezeraAutorizacion!=null) && (cabezeraAutorizacion.startsWith("Bearer "))) {
 			String token = cabezeraAutorizacion.substring(7);
 			if(this.servicioJwt.validarToken(token)) {
-				String username = this.servicioJwt.extraerUsername(token);
+				Long id = this.servicioJwt.extraerId(token);
 				try {
-					Usuario usuario = this.servicioUsuario.buscarUsuarioPorUsername(username);
+					Usuario usuario = this.servicioUsuario.buscarUsuarioPorId(id);
 					UsernamePasswordAuthenticationToken autenticacion = new UsernamePasswordAuthenticationToken(usuario.getUsername(), null, null);
 					autenticacion.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(autenticacion);
