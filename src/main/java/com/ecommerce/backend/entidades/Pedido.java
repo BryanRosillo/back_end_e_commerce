@@ -1,13 +1,9 @@
 package com.ecommerce.backend.entidades;
 
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.data.rest.core.annotation.RestResource;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,9 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PostLoad;
-import jakarta.persistence.PostPersist;
-import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
@@ -29,8 +23,9 @@ public class Pedido implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id_pedido;
 	
-	private Date fechaPedido;
+	private Date fechaPedido = new Date();
 	
+	@Positive(message = "El valor total del pedido debe ser positivo.")
 	private double totalDinero;
 	
 	@ManyToMany
