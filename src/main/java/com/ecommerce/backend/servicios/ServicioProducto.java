@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.backend.dao.ProductoDAO;
 import com.ecommerce.backend.entidades.Producto;
+import com.ecommerce.backend.excepciones.ExcepcionProducto;
 
 @Service
 public class ServicioProducto {
@@ -16,9 +17,9 @@ public class ServicioProducto {
         this.productoDao = productoDao;
     }
 
-    public Producto buscarProductoId(Long id) throws Exception{
+    public Producto buscarProductoId(Long id) throws ExcepcionProducto{
         return productoDao.findById(id)
-                            .orElseThrow(() -> new Exception("Producto no encontrado"));
+                            .orElseThrow(() -> new ExcepcionProducto("Producto no encontrado"));
     }
 
     public Producto guardaProducto(Producto producto){

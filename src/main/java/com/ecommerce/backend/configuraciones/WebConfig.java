@@ -1,12 +1,16 @@
 package com.ecommerce.backend.configuraciones;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class CorsConfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer{
 
+	@Autowired  
+	private LogConfig logConfig;
 	
 	@Override
 	public void addCorsMappings(CorsRegistry configuracion) {
@@ -14,8 +18,10 @@ public class CorsConfig implements WebMvcConfigurer {
 		.allowedOriginPatterns("*")
         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
 	}
-	
-	
-	
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(logConfig).addPathPatterns("/**");
+	}
 	
 }

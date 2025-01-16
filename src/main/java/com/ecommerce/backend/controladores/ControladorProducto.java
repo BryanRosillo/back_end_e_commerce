@@ -32,7 +32,7 @@ public class ControladorProducto {
             this.servicioProducto.guardaProducto(producto);
             return ResponseEntity.ok("Imagen subida exitosamente");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al subir la imagen: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error al subir la imagen");
         }
     }
 	

@@ -1,6 +1,8 @@
 package com.ecommerce.backend.servicios;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ecommerce.backend.dao.UsuarioDAO;
 import com.ecommerce.backend.entidades.Usuario;
 import com.ecommerce.backend.entidades.UsuarioDTO;
+import com.ecommerce.backend.excepciones.ExcepcionUsuario;
 
 @Service
 public class ServicioUsuario {
@@ -26,18 +29,18 @@ public class ServicioUsuario {
 	@Transactional
 	public Usuario buscarUsuarioPorUsername(String username) throws Exception {
 		return this.usuarioDao.findByUsername(username)
-				.orElseThrow(() -> new Exception("Usuario no encontrado") );
+				.orElseThrow(() -> new ExcepcionUsuario("Usuario no encontrado") );
 	}
 	
 	@Transactional
 	public Usuario buscarUsuarioPorId(Long id) throws Exception {
-		return this.usuarioDao.findById(id).orElseThrow(() -> new Exception("Usuario no encontrado"));
+		return this.usuarioDao.findById(id).orElseThrow(() -> new ExcepcionUsuario("Usuario no encontrado"));
 	}
 
 	public String validarUsuario(String username, String password) throws Exception{
 		Usuario usuario = this.buscarUsuarioPorUsername(username);
 		if(!passwordEncoder.matches(password, usuario.getPassword())) {
-			throw new Exception("Credenciales incorrectas");
+			throw new ExcepcionUsuario("Credenciales incorrectas");
 		}
 		return this.servicioJwt.generarToken(usuario.getId_usuario().toString());
 	}
@@ -51,10 +54,20 @@ public class ServicioUsuario {
 	public void actualizarContrasenia(UsuarioDTO usuarioActualizar) throws Exception{
 		Usuario usuario = this.buscarUsuarioPorUsername(usuarioActualizar.getUsername());
 		if(!this.passwordEncoder.matches(usuarioActualizar.getPreguntaSeguridad(), usuario.getPreguntaSeguridad())){
-			throw new Exception("Credenciales incorrectas");
+			throw new ExcepcionUsuario("Credenciales incorrectas");
 		}
 		usuario.setPassword(this.passwordEncoder.encode(usuarioActualizar.getNuevaContrasena()));
 		this.usuarioDao.save(usuario);
+	}
+	
+	public static String devolverUsernameAutenticado() throws ExcepcionUsuario {
+		Authentication autenticacion = SecurityContextHolder.getContext().getAuthentication(); 
+		if(autenticacion != null && autenticacion.isAuthenticated()) {
+			String username = (String) autenticacion.getPrincipal();
+			return username;
+		}else {
+			throw new ExcepcionUsuario("No se puede obtener el username del usuario.");
+		}
 	}
 
 }

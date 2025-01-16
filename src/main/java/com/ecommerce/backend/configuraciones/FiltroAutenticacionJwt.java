@@ -1,6 +1,7 @@
 package com.ecommerce.backend.configuraciones;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +18,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class FiltroAutenticacionJwt extends OncePerRequestFilter{
 	
@@ -37,11 +40,20 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter{
 			if(this.servicioJwt.validarToken(token)) {
 				Long id = this.servicioJwt.extraerId(token);
 				try {
+					
+					String direccionIp = request.getHeader("X-Forwarded-For");
+					if(direccionIp==null||direccionIp.isEmpty()) {
+						direccionIp = request.getRemoteAddr();
+					}
+					
 					Usuario usuario = this.servicioUsuario.buscarUsuarioPorId(id);
 					UsernamePasswordAuthenticationToken autenticacion = new UsernamePasswordAuthenticationToken(usuario.getUsername(), null, null);
 					autenticacion.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(autenticacion);
+					
+					log.info("PETICIÓN REALIZADA. Día y hora: {}, Usuario: {}, IP: {}, Endpoint llamado: {}", LocalDateTime.now().toString(), usuario.getUsername(), direccionIp, request.getRequestURI() );
 				} catch (Exception e) {
+					log.error("Hubo un problema en la autorización. Mensaje: {}, Causa: {}.", e.getMessage(), e.getCause());
 					throw new ServletException("El token ingresado no es válido.");
 				}
 			}
