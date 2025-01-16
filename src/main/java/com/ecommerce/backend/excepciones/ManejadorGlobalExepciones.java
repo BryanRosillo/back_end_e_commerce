@@ -31,7 +31,7 @@ public class ManejadorGlobalExepciones {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
 	}
 
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler({ExcepcionProducto.class, Exception.class, ExcepcionUsuario.class})
 	public ResponseEntity<Object> manejarExcepcionesGenerales(Exception e){
 		log.error("Hubo un problema en el servidor: {}", e.getMessage(), e);
 		Map<String, String> error = new HashMap<>();

@@ -53,6 +53,7 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter{
 					
 					log.info("PETICIÓN REALIZADA. Día y hora: {}, Usuario: {}, IP: {}, Endpoint llamado: {}", LocalDateTime.now().toString(), usuario.getUsername(), direccionIp, request.getRequestURI() );
 				} catch (Exception e) {
+					log.error("Hubo un problema en la autorización. Mensaje: {}, Causa: {}.", e.getMessage(), e.getCause());
 					throw new ServletException("El token ingresado no es válido.");
 				}
 			}
