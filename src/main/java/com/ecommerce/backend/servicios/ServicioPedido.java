@@ -8,6 +8,7 @@ import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.ecommerce.backend.dao.PedidoDAO;
@@ -30,9 +31,11 @@ public class ServicioPedido {
     @Autowired
     private ProductoDAO productoDao;
 
-    public List<Pedido> obtenerPedidosPorUsuario(Long idUsuario) {
+    public List<Pedido> obtenerPedidosPorUsuario() {
+        // Obtener el usuario autenticado
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         // Verificar si el usuario existe
-        Usuario usuario = usuarioDao.findById(idUsuario)
+        Usuario usuario = usuarioDao.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         // Obtener los pedidos del usuario

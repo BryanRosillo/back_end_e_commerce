@@ -50,9 +50,9 @@ public class ControladorProducto {
         }
     }
 	
-    @GetMapping("/usuario/{id_usuario}")
-    public ResponseEntity<List<Producto>> obtenerProductosPorUsuario(@PathVariable Long id_usuario) {
-        List<Producto> productos = servicioProducto.obtenerProductosPorUsuario(id_usuario);
+    @GetMapping("/usuario")
+    public ResponseEntity<List<Producto>> obtenerProductosPorUsuario() {
+        List<Producto> productos = servicioProducto.obtenerProductosPorUsuario();
         if (productos.isEmpty()) {
             return ResponseEntity.noContent().build(); // Si no hay productos, responde con código 204
         }
