@@ -21,10 +21,10 @@ public class ControladorPedido {
     @Autowired
     private ServicioPedido servicioPedido;
 
-    @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<Object> obtenerPedidosPorUsuario(@PathVariable Long idUsuario) {
+    @GetMapping("/usuario")
+    public ResponseEntity<Object> obtenerPedidosPorUsuario() {
         try {
-            List<Pedido> pedidos = servicioPedido.obtenerPedidosPorUsuario(idUsuario);
+            List<Pedido> pedidos = servicioPedido.obtenerPedidosPorUsuario();
 
             if (pedidos.isEmpty()) {
                 return ResponseEntity.ok("El usuario no tiene pedidos.");
