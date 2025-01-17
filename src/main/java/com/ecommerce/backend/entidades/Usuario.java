@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.ecommerce.backend.anotaciones.PasswordAdecuado;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,9 +39,11 @@ public class Usuario implements Serializable {
 	private String telefono;
 	
 	@OneToMany(mappedBy="usuario")
+	@JsonIgnore
 	private List<Producto> productos;
 	
 	@OneToMany(mappedBy="usuario")
+	@JsonIgnore
 	private List<Pedido> pedidos;
 	
 	private String preguntaSeguridad;

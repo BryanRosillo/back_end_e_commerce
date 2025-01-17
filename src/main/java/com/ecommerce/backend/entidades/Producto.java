@@ -2,7 +2,12 @@ package com.ecommerce.backend.entidades;
 
 import java.io.Serializable;
 import org.springframework.data.rest.core.annotation.RestResource;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Basic;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,10 +39,12 @@ public class Producto implements Serializable {
 	private String descripcion;
 	
 	@Lob
+	@Basic(fetch = FetchType.LAZY)
 	private byte[] imagen;
 	
 	@ManyToOne
 	@JoinColumn(name="id_usuario")
+	@JsonIgnore
 	private Usuario usuario;
 	
 

@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.rest.core.annotation.RestResource;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,10 +32,12 @@ public class Pedido implements Serializable {
 	private double totalDinero;
 	
 	@ManyToMany
+	@JsonIgnore
 	private List<Producto> productos;
 	
 	@ManyToOne
 	@JoinColumn(name="id_usuario")
+	@JsonIgnore
 	private Usuario usuario;
 	
     
