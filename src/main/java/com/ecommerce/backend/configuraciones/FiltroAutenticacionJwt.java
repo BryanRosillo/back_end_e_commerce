@@ -51,9 +51,9 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter{
 					autenticacion.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(autenticacion);
 					
-					log.info("PETICIÓN REALIZADA. Día y hora: {}, Usuario: {}, IP: {}, Endpoint llamado: {}", LocalDateTime.now().toString(), usuario.getUsername(), direccionIp, request.getRequestURI() );
+					log.info("PETICION REALIZADA. Día y hora: {}, Usuario: {}, IP: {}, Endpoint llamado: {}", LocalDateTime.now().toString(), usuario.getUsername(), direccionIp, request.getRequestURI() );
 				} catch (Exception e) {
-					log.error("Hubo un problema en la autorización. Mensaje: {}, Causa: {}.", e.getMessage(), e.getCause());
+					log.error("Hubo un problema en la autorización. Mensaje: {}. Causa: {}.", e.getMessage(), e.getCause());
 					throw new ServletException("El token ingresado no es válido.");
 				}
 			}

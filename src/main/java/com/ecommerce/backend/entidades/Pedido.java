@@ -3,10 +3,7 @@ package com.ecommerce.backend.entidades;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import org.springframework.data.rest.core.annotation.RestResource;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +16,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@RestResource(rel="pedidos", path="pedidos")
 public class Pedido implements Serializable {
 	
 	@Id

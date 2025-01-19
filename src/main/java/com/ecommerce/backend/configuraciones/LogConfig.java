@@ -39,7 +39,7 @@ public class LogConfig implements HandlerInterceptor {
 		
 		String timestamp = LocalDateTime.now().toString();
 		
-		log.info("PETICIÓN REALIZADA. Día y hora: {}, Usuario: {}, IP: {}, Endpoint llamado: {}", timestamp, username, direccionIp, request.getRequestURI() );
+		log.info("PETICION REALIZADA. Dia y hora: {}, Usuario: {}, IP: {}, Endpoint llamado: {}", timestamp, username, direccionIp, request.getRequestURI() );
 		
 		return true;
 	}
