@@ -1,6 +1,7 @@
 package com.ecommerce.backend.configuraciones;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -12,10 +13,13 @@ public class WebConfig implements WebMvcConfigurer{
 	@Autowired  
 	private LogConfig logConfig;
 	
+	@Value("${front.dominio}")
+	private String frontDominio;
+	
 	@Override
 	public void addCorsMappings(CorsRegistry configuracion) {
 		configuracion.addMapping("/**")
-		.allowedOriginPatterns("*")
+		.allowedOrigins(this.frontDominio, "http://localhost:*")
         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
 	}
 

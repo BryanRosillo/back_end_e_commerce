@@ -20,7 +20,7 @@ public interface ProductoDAO extends CrudRepository<Producto, Long>  {
 	Iterable<Producto> findAll();
 	
 	@Query("SELECT p FROM Producto p WHERE p.usuario.id = :id_usuario")
-  List<Producto> encontrarProductosPorUsuario(@Param("id_usuario")Long id_usuario);
+	List<Producto> encontrarProductosPorUsuario(@Param("id_usuario")Long id_usuario);
 
 	
 }
