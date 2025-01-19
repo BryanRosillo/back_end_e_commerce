@@ -1,10 +1,7 @@
 package com.ecommerce.backend.entidades;
 
 import java.io.Serializable;
-import org.springframework.data.rest.core.annotation.RestResource;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Basic;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -21,7 +18,6 @@ import lombok.Data;
 
 @Data
 @Entity
-@RestResource(rel="productos", path="productos")
 public class Producto implements Serializable {
 	
 	@Id
