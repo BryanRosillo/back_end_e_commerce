@@ -56,6 +56,13 @@ jobs:
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
+        env:
+          DB_URL: ${{secrets.DB_URL}}
+          DB_USERNAME: ${{secrets.DB_USERNAME}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+          JWT_SECRETO: ${{secrets.JWT_SECRETO}}
+          PAYPAL_CLIENTE_ID: ${{secrets.PAYPAL_CLIENTE_ID}}
+          PAYPAL_CLIENTE_SECRETO: ${{secrets.PAYPAL_CLIENTE_SECRETO}}
         with:
           app-name: 'backend-ecommerse'
           slot-name: 'Production'
