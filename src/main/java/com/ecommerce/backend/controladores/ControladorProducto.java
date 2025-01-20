@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.ecommerce.backend.entidades.Producto;
+import com.ecommerce.backend.excepciones.ExcepcionProducto;
 import com.ecommerce.backend.servicios.ServicioProducto;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path="/productos", produces="application/json")
@@ -27,6 +30,16 @@ public class ControladorProducto {
 	public ControladorProducto(ServicioProducto servicioProducto) {
         this.servicioProducto = servicioProducto;
     }
+    
+    @PostMapping
+    public ResponseEntity<Object> crearProducto(@RequestBody @Valid Producto producto){
+    	try {
+    		return ResponseEntity.status(HttpStatus.CREATED).body(this.servicioProducto.crearProducto(producto));
+    	}catch(Exception e) {
+    		return ResponseEntity.badRequest().build();
+    	}
+    }
+
 
     @PostMapping("/upload/{id}")
     public ResponseEntity<String> subirImagenProducto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
@@ -69,10 +82,20 @@ public class ControladorProducto {
                     .body("Error al actualizar el producto: " + e.getMessage());
         }
     }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> buscarProductoId(@PathVariable Long id){
+    	try {
+    		return ResponseEntity.ok(this.servicioProducto.buscarProductoId(id));
+    	}catch(ExcepcionProducto e) {
+    		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    	}
+    }
 	
     @GetMapping
     public ResponseEntity<Object> devolverProductos(){
         return ResponseEntity.ok(this.servicioProducto.devolverProductos());
     }
+    
 
 }

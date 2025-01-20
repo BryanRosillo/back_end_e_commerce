@@ -1,19 +1,15 @@
 package com.ecommerce.backend.configuraciones;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import com.ecommerce.backend.entidades.Usuario;
 import com.ecommerce.backend.servicios.ServicioJwt;
 import com.ecommerce.backend.servicios.ServicioUsuario;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,10 +46,9 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter{
 					UsernamePasswordAuthenticationToken autenticacion = new UsernamePasswordAuthenticationToken(usuario.getUsername(), null, null);
 					autenticacion.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 					SecurityContextHolder.getContext().setAuthentication(autenticacion);
-					
-					log.info("PETICION REALIZADA. Día y hora: {}, Usuario: {}, IP: {}, Endpoint llamado: {}", LocalDateTime.now().toString(), usuario.getUsername(), direccionIp, request.getRequestURI() );
+			
 				} catch (Exception e) {
-					log.error("Hubo un problema en la autorización. Mensaje: {}. Causa: {}.", e.getMessage(), e.getCause());
+					log.error("Hubo un problema en la autorización: {}", e.getMessage());
 					throw new ServletException("El token ingresado no es válido.");
 				}
 			}
@@ -61,11 +56,6 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter{
 		
 		filterChain.doFilter(request, response);
 		
-		
 	}
-
-
-	
-	
 
 }
