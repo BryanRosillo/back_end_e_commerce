@@ -1,20 +1,10 @@
 package com.ecommerce.backend.configuraciones;
 
 import java.time.LocalDateTime;
-
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.HandlerInterceptor;
-
 import com.ecommerce.backend.excepciones.ExcepcionUsuario;
 import com.ecommerce.backend.servicios.ServicioUsuario;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +29,7 @@ public class LogConfig implements HandlerInterceptor {
 		
 		String timestamp = LocalDateTime.now().toString();
 		
-		log.info("PETICION REALIZADA. Dia y hora: {}, Usuario: {}, IP: {}, Endpoint llamado: {}", timestamp, username, direccionIp, request.getRequestURI() );
+		log.info("PETICION REALIZADA. Dia y hora: {}, Usuario: {}, IP: {}, Endpoint llamado: {}, Metodo: {}", timestamp, username, direccionIp, request.getRequestURI(), request.getMethod());
 		
 		return true;
 	}

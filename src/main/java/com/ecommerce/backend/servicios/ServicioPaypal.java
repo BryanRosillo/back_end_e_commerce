@@ -59,7 +59,7 @@ public class ServicioPaypal {
 	    pagador.put("payment_method", "paypal");
 	    detallesPago.put("payer", pagador);
 
-	    BigDecimal totalDecimal = new BigDecimal(total).setScale(2, RoundingMode.HALF_UP);
+	    BigDecimal totalDecimal = BigDecimal.valueOf(total).setScale(2, RoundingMode.HALF_UP);
 	    String totalFormateado = totalDecimal.toString();
 	    Map<String, Object> detalleCantidad = new HashMap<>();
 	    detalleCantidad.put("total", totalFormateado);

@@ -22,11 +22,19 @@ public class ServicioProducto {
 
     private final ProductoDAO productoDao;
     private final UsuarioDAO usuarioDao;
+    private final ServicioUsuario servicioUsuario;
 
     @Autowired
-    public ServicioProducto(ProductoDAO productoDao, UsuarioDAO usuarioDAO) {
+    public ServicioProducto(ProductoDAO productoDao, UsuarioDAO usuarioDAO, ServicioUsuario servicioUsuario) {
         this.productoDao = productoDao;
         this.usuarioDao = usuarioDAO;
+        this.servicioUsuario = servicioUsuario;
+    }
+
+    public Producto crearProducto(Producto producto) throws Exception{
+    	Usuario usuario = this.servicioUsuario.buscarUsuarioPorUsername(ServicioUsuario.devolverUsernameAutenticado());
+    	producto.setUsuario(usuario);
+    	return this.guardaProducto(producto);
     }
 
     public Producto buscarProductoId(Long id) throws ExcepcionProducto{
