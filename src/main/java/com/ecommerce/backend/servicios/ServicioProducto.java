@@ -68,4 +68,8 @@ public class ServicioProducto {
         // Guardar cambios
         return productoDao.save(productoExistente);
     }
+
+    public Iterable<Producto> devolverProductos(){
+        return this.productoDao.findAll();
+    }
 }

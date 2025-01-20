@@ -70,5 +70,9 @@ public class ControladorProducto {
         }
     }
 	
+    @GetMapping
+    public ResponseEntity<Object> devolverProductos(){
+        return ResponseEntity.ok(this.servicioProducto.devolverProductos());
+    }
 
 }
