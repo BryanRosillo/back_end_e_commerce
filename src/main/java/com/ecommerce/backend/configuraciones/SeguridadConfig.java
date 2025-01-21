@@ -32,7 +32,7 @@ public class SeguridadConfig{
 	@Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
 		return http.authorizeHttpRequests(peticion -> 
-						peticion.requestMatchers("/login", "/registro", "/cambiar-contrasena").permitAll()
+						peticion.requestMatchers("/login", "/registro", "/cambiar-contrasena", "/paypal/exito", "/paypal/cancelar").permitAll()
 						.anyRequest().authenticated())
 					.csrf(csrf -> 
 						csrf.disable())
