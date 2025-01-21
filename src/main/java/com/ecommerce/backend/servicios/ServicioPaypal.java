@@ -72,8 +72,8 @@ public class ServicioPaypal {
 	    detallesPago.put("transactions", Arrays.asList(transaccion)); 
 
 	    Map<String, String> urlsRedireccion = new HashMap<>();
-	    urlsRedireccion.put("return_url", "http://localhost:8080/paypal/exito");
-	    urlsRedireccion.put("cancel_url", "http://localhost:8080/paypal/cancelar");
+	    urlsRedireccion.put("return_url", "https://backend-ecommerse-b6anfne4gqgacyc5.canadacentral-01.azurewebsites.net/paypal/exito");
+	    urlsRedireccion.put("cancel_url", "https://backend-ecommerse-b6anfne4gqgacyc5.canadacentral-01.azurewebsites.net/paypal/cancelar");
 	    detallesPago.put("redirect_urls", urlsRedireccion);
 
 	    HttpEntity<Map<String, Object>> peticion = new HttpEntity<>(detallesPago, cabeceras);
