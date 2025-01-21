@@ -36,12 +36,6 @@ public class FiltroAutenticacionJwt extends OncePerRequestFilter{
 			if(this.servicioJwt.validarToken(token)) {
 				Long id = this.servicioJwt.extraerId(token);
 				try {
-					
-					String direccionIp = request.getHeader("X-Forwarded-For");
-					if(direccionIp==null||direccionIp.isEmpty()) {
-						direccionIp = request.getRemoteAddr();
-					}
-					
 					Usuario usuario = this.servicioUsuario.buscarUsuarioPorId(id);
 					UsernamePasswordAuthenticationToken autenticacion = new UsernamePasswordAuthenticationToken(usuario.getUsername(), null, null);
 					autenticacion.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
