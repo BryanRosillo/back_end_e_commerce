@@ -26,10 +26,10 @@ public class ControladorRegistro {
     }
 
     @PostMapping(path="/registro", consumes="application/json")
-	public ResponseEntity<Usuario> registrarUsuario(@RequestBody @Valid Usuario usuario) {
+	public ResponseEntity<Object> registrarUsuario(@RequestBody @Valid Usuario usuario) {
         try{
             this.servicioUsuario.registrarUsuario(usuario);
-            return ResponseEntity.status(HttpStatus.OK).body(usuario);
+            return ResponseEntity.status(HttpStatus.OK).body("Usuario creado con éxito");
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
