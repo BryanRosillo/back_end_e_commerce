@@ -17,10 +17,15 @@ import com.ecommerce.backend.servicios.ServicioPedido;
 @RestController
 @RequestMapping(path = "/pedidos", produces = "application/json")
 public class ControladorPedido {
+	
+    private final ServicioPedido servicioPedido;
+    
     @Autowired
-    private ServicioPedido servicioPedido;
+    private ControladorPedido(ServicioPedido servicioPedido) {
+		this.servicioPedido = servicioPedido;
+	}
 
-    @GetMapping("/usuario")
+	@GetMapping("/usuario")
     public ResponseEntity<Object> obtenerPedidosPorUsuario() {
         try {
             List<Pedido> pedidos = servicioPedido.obtenerPedidosPorUsuario();

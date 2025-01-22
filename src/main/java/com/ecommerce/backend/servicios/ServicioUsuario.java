@@ -25,19 +25,20 @@ public class ServicioUsuario {
 		this.servicioJwt = servicioJwt;
 	}
 	
-	@Transactional
+	@Transactional(readOnly=true)
 	public Usuario buscarUsuarioPorUsername(String username) throws Exception {
 		return this.usuarioDao.findByUsername(username)
 				.orElseThrow(() -> new ExcepcionUsuario("Usuario no encontrado") );
 	}
 	
-	@Transactional
+	@Transactional(readOnly=true)
 	public Usuario buscarUsuarioPorId(Long id) throws Exception {
 		return this.usuarioDao.findById(id).orElseThrow(() -> new ExcepcionUsuario("Usuario no encontrado"));
 	}
 
+	@Transactional
 	public String validarUsuario(String username, String password) throws Exception{
-		Usuario usuario = this.buscarUsuarioPorUsername(username);
+		Usuario usuario = buscarUsuarioPorUsername(username);
 		if(!passwordEncoder.matches(password, usuario.getPassword())) {
 			throw new ExcepcionUsuario("Credenciales incorrectas");
 		}
@@ -51,7 +52,7 @@ public class ServicioUsuario {
 	}
 
 	public void actualizarContrasenia(UsuarioDTO usuarioActualizar) throws Exception{
-		Usuario usuario = this.buscarUsuarioPorUsername(usuarioActualizar.getUsername());
+		Usuario usuario = buscarUsuarioPorUsername(usuarioActualizar.getUsername());
 		if(!this.passwordEncoder.matches(usuarioActualizar.getPreguntaSeguridad(), usuario.getPreguntaSeguridad())){
 			throw new ExcepcionUsuario("Credenciales incorrectas");
 		}

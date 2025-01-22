@@ -12,10 +12,14 @@ import com.ecommerce.backend.servicios.ServicioPaypal;
 @RestController
 @RequestMapping("/paypal")
 public class ControladorPago {
-	
+
+	private final ServicioPaypal servicioPaypal;
+		
 	@Autowired
-	private ServicioPaypal servicioPaypal;
-	
+	private ControladorPago(ServicioPaypal servicioPaypal) {
+		this.servicioPaypal = servicioPaypal;
+	}
+
 	@PostMapping("/pagar")
 	public String crearPago(@RequestParam Double total) {
 	    return this.servicioPaypal.solicitarPago(total);
