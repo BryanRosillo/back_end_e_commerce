@@ -2,6 +2,8 @@ package com.ecommerce.backend.servicios;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -94,20 +96,21 @@ public class ServicioPaypal {
 		
 	}
 	
-	public String procesarPago(String paymentId, String PayerID) {
+	public String procesarPago(String pagoId, String pagadorID) {
 		String tokenAcceso = this.obtenerTokenAcceso();
 		
 		RestTemplate restTemplate = new RestTemplate();
 
         String jsonBody = "{"
-                + "\"payer_id\":\"" + PayerID + "\""
+                + "\"payer_id\":\"" + pagadorID + "\""
                 + "}";
 
         HttpHeaders cabeceras = new HttpHeaders();
         cabeceras.set("Authorization", "Bearer " + tokenAcceso);
         cabeceras.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> peticion = new HttpEntity<>(jsonBody, cabeceras);
-        ResponseEntity<String> respuesta = restTemplate.exchange(this.PAYPAL_URL_PAGO+"/"+paymentId+"/execute", HttpMethod.POST, peticion, String.class, paymentId);
+        String pagoIdCodificado = URLEncoder.encode(pagoId, StandardCharsets.UTF_8);
+        ResponseEntity<String> respuesta = restTemplate.exchange(this.PAYPAL_URL_PAGO+"/"+pagoIdCodificado+"/execute", HttpMethod.POST, peticion, String.class, pagoId);
         return respuesta.getBody();
 	}
 		

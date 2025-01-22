@@ -15,23 +15,9 @@ public class ValidadorPassword implements ConstraintValidator<PasswordAdecuado, 
             return false;
         }
 
-        if (!password.matches(".*[a-z].*")) {
-            return false;
-        }
+        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
 
-        if (!password.matches(".*[A-Z].*")) {
-            return false;
-        }
-
-        if (!password.matches(".*\\d.*")) {
-            return false;
-        }
-
-        if (!password.matches(".*[@$!%*?&].*")) {
-            return false;
-        }
-
-        return true;
+        return password.matches(regex);
     }
 
     

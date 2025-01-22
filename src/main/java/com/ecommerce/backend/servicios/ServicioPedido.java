@@ -19,16 +19,18 @@ import com.ecommerce.backend.entidades.Usuario;
 @Service
 public class ServicioPedido {
     
-    @Autowired
-    private PedidoDAO pedidoDao;
+    private final PedidoDAO pedidoDao;
+    private final UsuarioDAO usuarioDao;
+    private final ProductoDAO productoDao;
     
     @Autowired
-    private UsuarioDAO usuarioDao;
-    
-    @Autowired
-    private ProductoDAO productoDao;
+    private ServicioPedido(PedidoDAO pedidoDao, UsuarioDAO usuarioDao, ProductoDAO productoDao) {
+		this.pedidoDao = pedidoDao;
+		this.usuarioDao = usuarioDao;
+		this.productoDao = productoDao;
+	}
 
-    public List<Pedido> obtenerPedidosPorUsuario() {
+	public List<Pedido> obtenerPedidosPorUsuario() {
         // Obtener el usuario autenticado
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         // Verificar si el usuario existe

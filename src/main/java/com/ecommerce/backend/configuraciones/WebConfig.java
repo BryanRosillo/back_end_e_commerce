@@ -9,18 +9,20 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer{
-
-	@Autowired  
+	
+	@Autowired
 	private LogConfig logConfig;
 	
 	@Value("${front.dominio}")
 	private String frontDominio;
 	
+
 	@Override
 	public void addCorsMappings(CorsRegistry configuracion) {
 		configuracion.addMapping("/**")
 		.allowedOriginPatterns(this.frontDominio,"http://localhost:*","http://127.0.0.1:*")
-        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
+        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
+        .allowedHeaders("*");
 	}
 
 	@Override
