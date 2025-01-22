@@ -14,13 +14,13 @@ public class WebConfig implements WebMvcConfigurer{
 	private LogConfig logConfig;
 	
 	@Value("${front.dominio}")
-	private String frontDominio;
+	private String FRONT_DOMINIO;
 	
 
 	@Override
 	public void addCorsMappings(CorsRegistry configuracion) {
 		configuracion.addMapping("/**")
-		.allowedOriginPatterns(this.frontDominio,"http://localhost:*","http://127.0.0.1:*")
+		.allowedOriginPatterns(this.FRONT_DOMINIO,"http://localhost:*","http://127.0.0.1:*")
         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
         .allowedHeaders("*");
 	}
