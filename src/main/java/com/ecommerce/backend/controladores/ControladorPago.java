@@ -1,12 +1,13 @@
 package com.ecommerce.backend.controladores;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.ecommerce.backend.servicios.ServicioPaypal;
 
@@ -15,6 +16,9 @@ import com.ecommerce.backend.servicios.ServicioPaypal;
 public class ControladorPago {
 
 	private final ServicioPaypal servicioPaypal;
+	
+	@Value("${front.dominio}")
+	private String FRONT_DOMINIO;
 		
 	@Autowired
 	private ControladorPago(ServicioPaypal servicioPaypal) {
@@ -26,14 +30,15 @@ public class ControladorPago {
 	    return this.servicioPaypal.solicitarPago(total);
 	}
 
-	@GetMapping(path="/exito", produces="application/json")
-	public ResponseEntity<Object> success(@RequestParam String paymentId, @RequestParam String PayerID) {
-		return ResponseEntity.ok(this.servicioPaypal.procesarPago(paymentId, PayerID));
+	@GetMapping(path="/exito")
+	public RedirectView efectuarPago(@RequestParam String paymentId, @RequestParam String PayerID) {
+		this.servicioPaypal.procesarPago(paymentId, PayerID);
+		return new RedirectView(this.FRONT_DOMINIO+"?status=exito");
 	}
 	
-    @GetMapping(path="/cancelar", produces="application/json")
-    public ResponseEntity<Object> cancel() {
-        return ResponseEntity.badRequest().body("El pago fue cancelado.");
+    @GetMapping(path="/cancelar")
+    public RedirectView cancelarPago() {
+    	return new RedirectView(this.FRONT_DOMINIO+"?status=cancelado");
     }
 	
 

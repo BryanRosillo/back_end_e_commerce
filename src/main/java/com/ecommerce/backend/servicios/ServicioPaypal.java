@@ -96,7 +96,7 @@ public class ServicioPaypal {
 		
 	}
 	
-	public String procesarPago(String pagoId, String pagadorID) {
+	public void procesarPago(String pagoId, String pagadorID) {
 		String tokenAcceso = this.obtenerTokenAcceso();
 		
 		RestTemplate restTemplate = new RestTemplate();
@@ -111,7 +111,6 @@ public class ServicioPaypal {
         HttpEntity<String> peticion = new HttpEntity<>(jsonBody, cabeceras);
         String pagoIdCodificado = URLEncoder.encode(pagoId, StandardCharsets.UTF_8);
         ResponseEntity<String> respuesta = restTemplate.exchange(this.PAYPAL_URL_PAGO+"/"+pagoIdCodificado+"/execute", HttpMethod.POST, peticion, String.class, pagoId);
-        return respuesta.getBody();
 	}
 		
 }
