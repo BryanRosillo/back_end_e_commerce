@@ -36,6 +36,10 @@ public class SeguridadConfig{
 						.anyRequest().authenticated())
 					.csrf(csrf -> 
 						csrf.disable())
+					.headers(cabecera->
+							cabecera.frameOptions(opcion->opcion.deny())
+									.httpStrictTransportSecurity(opcion->opcion.includeSubDomains(true).maxAgeInSeconds(31536000))
+									.cacheControl(opcion->opcion.disable()))
 					.addFilterBefore(filtroAutenticacionJwt(), UsernamePasswordAuthenticationFilter.class)
 					.build();
 	}
