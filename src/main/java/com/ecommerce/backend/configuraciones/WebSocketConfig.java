@@ -12,12 +12,12 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 	@Value("${front.dominio}")
-	private String frontDominio;
+	private String FRONT_DOMINIO;
 	
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry configuracion) {
 		configuracion.addEndpoint("/chat-websocket")
-		.setAllowedOrigins(this.frontDominio,"http://localhost:*", "http://127.0.0.1:*")
+		.setAllowedOrigins(this.FRONT_DOMINIO)
 		.withSockJS();
 	}
 

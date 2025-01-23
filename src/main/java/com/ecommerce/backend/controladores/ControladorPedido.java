@@ -43,8 +43,8 @@ public class ControladorPedido {
     @PostMapping("/crear")
     public ResponseEntity<String> crearPedido(@RequestBody PedidoDTO pedidoRequest) {
         try {
-            String mensaje = servicioPedido.crearPedido(pedidoRequest);
-            return ResponseEntity.status(HttpStatus.CREATED).body(mensaje);
+            servicioPedido.crearPedido(pedidoRequest);
+            return ResponseEntity.ok("Pedido creado exitosamente.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el pedido: " + e.getMessage());
         }
