@@ -15,39 +15,34 @@ import com.ecommerce.backend.entidades.Pedido;
 import com.ecommerce.backend.entidades.PedidoDTO;
 import com.ecommerce.backend.entidades.Producto;
 import com.ecommerce.backend.entidades.Usuario;
+import com.ecommerce.backend.excepciones.ExcepcionPedido;
 
 @Service
 public class ServicioPedido {
     
     private final PedidoDAO pedidoDao;
-    private final UsuarioDAO usuarioDao;
+    private final ServicioUsuario servicioUsuario;
     private final ProductoDAO productoDao;
     
     @Autowired
-    private ServicioPedido(PedidoDAO pedidoDao, UsuarioDAO usuarioDao, ProductoDAO productoDao) {
+    private ServicioPedido(PedidoDAO pedidoDao, UsuarioDAO usuarioDao, ProductoDAO productoDao, ServicioUsuario servicioUsuario) {
 		this.pedidoDao = pedidoDao;
-		this.usuarioDao = usuarioDao;
+		this.servicioUsuario = servicioUsuario;
 		this.productoDao = productoDao;
 	}
 
-	public List<Pedido> obtenerPedidosPorUsuario() {
+	public List<Pedido> obtenerPedidosPorUsuario() throws Exception {
         // Obtener el usuario autenticado
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         // Verificar si el usuario existe
-        Usuario usuario = usuarioDao.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Usuario usuario = this.servicioUsuario.buscarUsuarioPorUsername(username);
 
         // Obtener los pedidos del usuario
         return usuario.getPedidos();
     }
 
-    public String crearPedido(PedidoDTO pedidoRequest) {
-        // Validar usuario
-        Optional<Usuario> usuarioOpt = usuarioDao.findById(pedidoRequest.getId_usuario());
-        if (usuarioOpt.isEmpty()) {
-            return "Usuario no encontrado";
-        }
-        Usuario usuario = usuarioOpt.get();
+    public void crearPedido(PedidoDTO pedidoRequest) throws Exception {
+        Usuario usuario = this.servicioUsuario.buscarUsuarioPorId(pedidoRequest.getId_usuario());
 
         // Validar y obtener productos
         List<Producto> productos = StreamSupport
@@ -55,7 +50,7 @@ public class ServicioPedido {
                 .collect(Collectors.toList());
 
         if (productos.isEmpty() || productos.size() != pedidoRequest.getProductosIds().size()) {
-            return "Algunos productos no fueron encontrados";
+            throw new ExcepcionPedido("Algunos productos no fueron encontrados");
         }
 
         // Crear y guardar el pedido
@@ -66,6 +61,5 @@ public class ServicioPedido {
         pedido.setTotalDinero(productos.stream().mapToDouble(Producto::getPrecio).sum());
 
         pedidoDao.save(pedido);
-        return "Pedido creado exitosamente con ID: " + pedido.getId_pedido();
     }
 }
