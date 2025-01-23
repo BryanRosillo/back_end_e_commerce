@@ -17,6 +17,10 @@ import com.ecommerce.backend.entidades.Producto;
 import com.ecommerce.backend.entidades.Usuario;
 import com.ecommerce.backend.excepciones.ExcepcionPedido;
 
+/**
+ * Servicio encargado de gestionar los pedidos de los usuarios.
+ * Este servicio permite la creación de pedidos y la obtención de pedidos realizados por el usuario autenticado.
+ */
 @Service
 public class ServicioPedido {
     
@@ -24,6 +28,14 @@ public class ServicioPedido {
     private final ServicioUsuario servicioUsuario;
     private final ProductoDAO productoDao;
     
+    /**
+     * Constructor que inyecta las dependencias necesarias para el servicio de pedidos.
+     * 
+     * @param pedidoDao El DAO encargado de las operaciones sobre los pedidos.
+     * @param usuarioDao El DAO encargado de las operaciones sobre los usuarios.
+     * @param productoDao El DAO encargado de las operaciones sobre los productos.
+     * @param servicioUsuario El servicio encargado de gestionar los usuarios.
+     */    
     @Autowired
     private ServicioPedido(PedidoDAO pedidoDao, UsuarioDAO usuarioDao, ProductoDAO productoDao, ServicioUsuario servicioUsuario) {
 		this.pedidoDao = pedidoDao;
@@ -31,6 +43,12 @@ public class ServicioPedido {
 		this.productoDao = productoDao;
 	}
 
+    /**
+     * Obtiene la lista de pedidos realizados por el usuario autenticado.
+     * 
+     * @return Una lista de objetos {@link Pedido} asociados al usuario autenticado.
+     * @throws Exception Si ocurre algún error al obtener los pedidos del usuario.
+     */    
 	public List<Pedido> obtenerPedidosPorUsuario() throws Exception {
         // Obtener el usuario autenticado
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -41,6 +59,13 @@ public class ServicioPedido {
         return usuario.getPedidos();
     }
 
+    /**
+     * Crea un nuevo pedido en el sistema.
+     * Valida la existencia de los productos solicitados y los asocia al pedido.
+     * 
+     * @param pedidoRequest El objeto {@link PedidoDTO} que contiene la información del pedido a crear.
+     * @throws Exception Si ocurre algún error al crear el pedido o si algunos productos no se encuentran.
+     */    
     public void crearPedido(PedidoDTO pedidoRequest) throws Exception {
         Usuario usuario = this.servicioUsuario.buscarUsuarioPorId(pedidoRequest.getId_usuario());
 

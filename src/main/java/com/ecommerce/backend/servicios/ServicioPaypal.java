@@ -19,6 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.ecommerce.backend.entidades.RespuestaTokenAcceso;
 
+/**
+ * Servicio encargado de interactuar con la API de PayPal para procesar pagos.
+ * Este servicio se encarga de obtener un token de acceso, crear pagos y procesar pagos realizados por los usuarios.
+ */
 @Service
 public class ServicioPaypal {
 	
@@ -31,6 +35,12 @@ public class ServicioPaypal {
 	@Value("${paypal.cliente.secreto}")
 	private String SECRETO_CLIENTE;
 	
+	/**
+	 * Obtiene un token de acceso a la API de PayPal.
+	 * Este token se utiliza para autenticar las solicitudes de pago.
+	 * 
+	 * @return El token de acceso a la API de PayPal.
+	 */	
 	private String obtenerTokenAcceso() {
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders cabeceras = new HttpHeaders();
@@ -45,57 +55,71 @@ public class ServicioPaypal {
 		}
 	}
 	
+	/**
+	 * Solicita la creación de un pago en PayPal.
+	 * Este método prepara los detalles del pago y redirige al usuario para autorizarlo.
+	 * 
+	 * @param total El monto total del pago a realizar.
+	 * @return La URL de aprobación donde el usuario puede autorizar el pago.
+	 */	
 	public String solicitarPago(Double total) {
-	    String token = this.obtenerTokenAcceso();
-	    
-	    RestTemplate restTemplate = new RestTemplate();
-	    HttpHeaders cabeceras = new HttpHeaders();
-	    cabeceras.setContentType(MediaType.APPLICATION_JSON);
-	    cabeceras.set("Authorization", "Bearer " + token);
+			String token = this.obtenerTokenAcceso();
+			
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders cabeceras = new HttpHeaders();
+			cabeceras.setContentType(MediaType.APPLICATION_JSON);
+			cabeceras.set("Authorization", "Bearer " + token);
 
-	    Map<String, Object> detallesPago = new HashMap<>();
-	    detallesPago.put("intent", "sale");
+			Map<String, Object> detallesPago = new HashMap<>();
+			detallesPago.put("intent", "sale");
 
-	    Map<String, Object> pagador = new HashMap<>();
-	    pagador.put("payment_method", "paypal");
-	    detallesPago.put("payer", pagador);
+			Map<String, Object> pagador = new HashMap<>();
+			pagador.put("payment_method", "paypal");
+			detallesPago.put("payer", pagador);
 
-	    BigDecimal totalDecimal = BigDecimal.valueOf(total).setScale(2, RoundingMode.HALF_UP);
-	    String totalFormateado = totalDecimal.toString();
-	    Map<String, Object> detalleCantidad = new HashMap<>();
-	    detalleCantidad.put("total", totalFormateado);
-	    detalleCantidad.put("currency", "USD");
+			BigDecimal totalDecimal = BigDecimal.valueOf(total).setScale(2, RoundingMode.HALF_UP);
+			String totalFormateado = totalDecimal.toString();
+			Map<String, Object> detalleCantidad = new HashMap<>();
+			detalleCantidad.put("total", totalFormateado);
+			detalleCantidad.put("currency", "USD");
 
-	    Map<String, Object> transaccion = new HashMap<>();
-	    transaccion.put("amount", detalleCantidad); 
-	    transaccion.put("description", "Test Payment");
+			Map<String, Object> transaccion = new HashMap<>();
+			transaccion.put("amount", detalleCantidad); 
+			transaccion.put("description", "Test Payment");
 
-	    detallesPago.put("transactions", Arrays.asList(transaccion)); 
+			detallesPago.put("transactions", Arrays.asList(transaccion)); 
 
-	    Map<String, String> urlsRedireccion = new HashMap<>();
-	    urlsRedireccion.put("return_url", "https://backend-ecommerse-b6anfne4gqgacyc5.canadacentral-01.azurewebsites.net/paypal/exito");
-	    urlsRedireccion.put("cancel_url", "https://backend-ecommerse-b6anfne4gqgacyc5.canadacentral-01.azurewebsites.net/paypal/cancelar");
-	    detallesPago.put("redirect_urls", urlsRedireccion);
+			Map<String, String> urlsRedireccion = new HashMap<>();
+			urlsRedireccion.put("return_url", "https://backend-ecommerse-b6anfne4gqgacyc5.canadacentral-01.azurewebsites.net/paypal/exito");
+			urlsRedireccion.put("cancel_url", "https://backend-ecommerse-b6anfne4gqgacyc5.canadacentral-01.azurewebsites.net/paypal/cancelar");
+			detallesPago.put("redirect_urls", urlsRedireccion);
 
-	    HttpEntity<Map<String, Object>> peticion = new HttpEntity<>(detallesPago, cabeceras);
+			HttpEntity<Map<String, Object>> peticion = new HttpEntity<>(detallesPago, cabeceras);
 
-	    ResponseEntity<Map> respuesta = restTemplate.postForEntity(this.PAYPAL_URL_PAGO, peticion, Map.class);
+			ResponseEntity<Map> respuesta = restTemplate.postForEntity(this.PAYPAL_URL_PAGO, peticion, Map.class);
 
-	    if (respuesta.getStatusCode() == HttpStatus.CREATED) {
-	        List<Map<String, String>> links = (List<Map<String, String>>) respuesta.getBody().get("links");
-	        for (Map<String, String> link : links) {
-	            if (link.get("rel").equals("approval_url")) {
-	                return link.get("href"); 
-	            }
-	        }
-	    } else {
-	        throw new RuntimeException("Fallo en crear el pago: " + respuesta.getStatusCode());
-	    }
-	    
-	    return null;
+			if (respuesta.getStatusCode() == HttpStatus.CREATED) {
+					List<Map<String, String>> links = (List<Map<String, String>>) respuesta.getBody().get("links");
+					for (Map<String, String> link : links) {
+							if (link.get("rel").equals("approval_url")) {
+									return link.get("href"); 
+							}
+					}
+			} else {
+					throw new RuntimeException("Fallo en crear el pago: " + respuesta.getStatusCode());
+			}
+			
+			return null;
 		
 	}
 	
+	/**
+	 * Procesa un pago realizado en PayPal.
+	 * Este método se invoca una vez que el usuario ha autorizado el pago.
+	 * 
+	 * @param pagoId El ID del pago realizado.
+	 * @param pagadorID El ID del pagador.
+	 */	
 	public void procesarPago(String pagoId, String pagadorID) {
 		String tokenAcceso = this.obtenerTokenAcceso();
 		
