@@ -1,12 +1,17 @@
 package com.ecommerce.backend.servicios;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ecommerce.backend.dao.ProductoDAO;
 import com.ecommerce.backend.dao.UsuarioDAO;
 import com.ecommerce.backend.entidades.Producto;
@@ -119,5 +124,39 @@ public class ServicioProducto {
 
     public Iterable<Producto> devolverProductos(){
         return this.productoDao.findAll();
+    }
+    
+    /**
+     * Método que guarda la imagen de un producto. En el proceso, se verifica el peso y extensión.
+     * 
+     * @param imagen - imagen del producto de tipo MultipartFile.
+     * @param id - id del producto asociado.
+     * @throws ExcepcionProducto si hay un problema al subir la imagen. 
+     * @throws IOException 
+     */
+    public void guardarImagenProducto(MultipartFile imagen, Long id) throws ExcepcionProducto, IOException {
+    	//Se verifica el peso de la imagen
+    	long maxSize = 3 * 1024 * 1024; // 3 MB en bytes
+        if (imagen.getSize() > maxSize) {
+            throw new ExcepcionProducto("La imagen sobrepasa el peso máximo.");
+        }
+        
+        // Verificar extensión de archivo
+        String extension = FilenameUtils.getExtension(imagen.getOriginalFilename()).toLowerCase();
+        if (!(extension.equals("png") || extension.equals("jpg") || extension.equals("jpeg"))) {
+        	throw new ExcepcionProducto("Solo se permiten archivos PNG o JPG.");
+        }
+
+        // Verificar tipo MIME real 
+        Tika tika = new Tika();
+        String mimeType = tika.detect(imagen.getInputStream());
+        if (!(mimeType.equals("image/png") || mimeType.equals("image/jpeg"))) {
+        	throw new ExcepcionProducto("El archivo no es una imagen válida.");
+        }
+        
+        //Se guarda el producto
+        Producto producto = this.buscarProductoId(id);
+        producto.setImagen(imagen.getBytes());
+        this.guardaProducto(producto);
     }
 }

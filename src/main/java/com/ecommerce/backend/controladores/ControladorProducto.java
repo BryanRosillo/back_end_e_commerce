@@ -1,7 +1,6 @@
 package com.ecommerce.backend.controladores;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,9 +64,7 @@ public class ControladorProducto {
     @PostMapping("/upload/{id}")
     public ResponseEntity<String> subirImagenProducto(@PathVariable Long id, @RequestParam("file") MultipartFile file) {
         try {
-            Producto producto = this.servicioProducto.buscarProductoId(id);
-            producto.setImagen(file.getBytes());
-            this.servicioProducto.guardaProducto(producto);
+        	this.servicioProducto.guardarImagenProducto(file, id);
             return ResponseEntity.ok("Imagen subida exitosamente");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al subir la imagen");

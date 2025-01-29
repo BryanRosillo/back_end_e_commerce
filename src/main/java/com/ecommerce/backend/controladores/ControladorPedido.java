@@ -50,7 +50,7 @@ public class ControladorPedido {
 
             return ResponseEntity.ok(pedidos);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al obtener los pedidos: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error al obtener los pedidos.");
         }
     }
 
@@ -66,7 +66,7 @@ public class ControladorPedido {
             servicioPedido.crearPedido(pedidoRequest);
             return ResponseEntity.ok("Pedido creado exitosamente.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el pedido: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el pedido.");
         }
     }
 }
